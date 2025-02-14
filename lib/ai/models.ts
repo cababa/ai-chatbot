@@ -1,8 +1,6 @@
 import { google } from '@ai-sdk/google';
 import {
   customProvider,
-  extractReasoningMiddleware,
-  wrapLanguageModel,
   generateText,
 } from 'ai';
 
@@ -11,24 +9,14 @@ export const DEFAULT_CHAT_MODEL: string = 'chat-model-small';
 export const myProvider = customProvider({
   languageModels: {
     // Use a flash-lite preview for quick/light tasks
-    'chat-model-small': google('gemini-1.5-flash-lite-preview-02-05'),
+    'chat-model-small': google('gemini-2.0-flash-lite-preview-02-05'),
     // Use the pro latest model for complex multi-step tasks
-    'chat-model-large': google('gemini-1.5-pro-latest'),
-    // Wrap a pro model with reasoning middleware for advanced reasoning
-    'chat-model-reasoning': wrapLanguageModel({
-      model: google('gemini-1.5-pro-latest', {
-        safetySettings: [
-          {
-            category: 'HARM_CATEGORY_UNSPECIFIED',
-            threshold: 'BLOCK_LOW_AND_ABOVE',
-          },
-        ],
-      }),
-      middleware: extractReasoningMiddleware({ tagName: 'think' }),
-    }),
+    'chat-model-large': google('gemini-2.0-flash'),
+    // Non-reasoning model; google no longer provides a reasoning version.
+    'chat-model-reasoning': google('gemini-2.0-flash-thinking-exp-01-21'),
     // Other models can be defined similarly
-    'title-model': google('gemini-1.5-pro-latest'),
-    'artifact-model': google('gemini-1.5-flash-lite-preview-02-05'),
+    'title-model': google('gemini-2.0-flash'),
+    'artifact-model': google('gemini-2.0-flash-thinking-exp-01-21'),
   },
 });
 
@@ -55,14 +43,3 @@ export const chatModels: Array<ChatModel> = [
     description: 'Utiliza razonamiento avanzado',
   },
 ];
-
-// // Example usage:
-// async function testGeneration() {
-//   const { text } = await generateText({
-//     model: google('gemini-1.5-pro-latest'),
-//     prompt: 'Write a vegetarian lasagna recipe for 4 people.',
-//   });
-//   console.log('Generated text:', text);
-// }
-
-// testGeneration().catch(console.error);

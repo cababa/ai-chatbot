@@ -87,6 +87,11 @@ export async function POST(request: Request) {
           }),
         },
         onFinish: async ({ response, reasoning }) => {
+          // Log the final response and reasoning to the terminal
+          //console.log("Final response:", JSON.stringify(response, null, 2));
+          if (reasoning) {
+            //console.log("Final reasoning:", reasoning);
+          }
           if (session.user?.id) {
             try {
               const sanitizedResponseMessages = sanitizeResponseMessages({
@@ -106,7 +111,7 @@ export async function POST(request: Request) {
                 }),
               });
             } catch (error) {
-              console.error('Failed to save chat');
+              console.error('Failed to save chat', error);
             }
           }
         },
@@ -120,8 +125,10 @@ export async function POST(request: Request) {
         sendReasoning: true,
       });
     },
-    onError: () => {
-      return 'Oops, an error occured!';
+    onError: (error) => {
+      // Log the error details in the terminal
+      console.error("Error in data stream:", error);
+      return "Oops, an error occured!";
     },
   });
 }
