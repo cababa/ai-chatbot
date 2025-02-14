@@ -26,6 +26,45 @@ import { MessageEditor } from './message-editor';
 import { DocumentPreview } from './document-preview';
 import { MessageReasoning } from './message-reasoning';
 
+/**
+ * Renders a preview for a chat message with support for viewing and editing modes,
+ * displaying attachments, reasoning, and tool invocations.
+ *
+ * This component manages its internal mode state ("view" or "edit") and conditionally
+ * renders different content based on the type of the message content. It supports both
+ * simple string content and an array of content objects, excluding items of type "metadata-delta".
+ *
+ * @param chatId - Unique identifier for the chat session.
+ * @param message - The message object containing content, reasoning, attachments, and tool invocations.
+ * @param vote - Optional vote information associated with the message.
+ * @param isLoading - Flag indicating whether data fetching or processing is in progress.
+ * @param setMessages - Function to update the list of messages; accepts either a new message array
+ *                      or an updater function.
+ * @param reload - Function to reload or refresh the message data; optionally accepts chat request options.
+ * @param isReadonly - Flag that, when true, disables editing and interactive actions on the message.
+ *
+ * @returns A React element that renders the message preview with support for editing,
+ *          attachments preview, reasoning display, and tool invocation outputs.
+ *
+ * @example
+ * // Usage example:
+ * <PreviewMessage
+ *   chatId="chat-123"
+ *   message={currentMessage}
+ *   vote={userVote}
+ *   isLoading={false}
+ *   setMessages={updateMessages}
+ *   reload={reloadMessages}
+ *   isReadonly={false}
+ * />
+ */
+
+/**
+ * Renders a placeholder or actual representation of a "thinking" message that indicates
+ * the system is processing or awaiting a response.
+ *
+ * @returns A React element representing a "thinking" message, or null if not applicable.
+ */
 const PurePreviewMessage = ({
   chatId,
   message,
@@ -108,7 +147,7 @@ const PurePreviewMessage = ({
                         <PencilEditIcon />
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>Edit message</TooltipContent>
+                    <TooltipContent>Editar mensaje</TooltipContent>
                   </Tooltip>
                 )}
 

@@ -15,8 +15,8 @@ export const myProvider = customProvider({
     // Non-reasoning model; google no longer provides a reasoning version.
     'chat-model-reasoning': google('gemini-2.0-flash-thinking-exp-01-21'),
     // Other models can be defined similarly
-    'title-model': google('gemini-2.0-flash'),
-    'artifact-model': google('gemini-2.0-flash-thinking-exp-01-21'),
+    'title-model': google('gemini-2.0-flash-lite-preview-02-05'),
+    'artifact-model': google('gemini-2.0-flash'),
   },
 });
 

@@ -59,7 +59,7 @@ export function SidebarUserNav({ user }: { user: User }) {
                   });
                 }}
               >
-                Sign out
+                Cerrar Sesión
               </button>
             </DropdownMenuItem>
           </DropdownMenuContent>

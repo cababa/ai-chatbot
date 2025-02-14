@@ -158,13 +158,23 @@ export function sanitizeResponseMessages({
 
     if (typeof message.content === 'string') return message;
 
-    const sanitizedContent = message.content.filter((content) =>
-      content.type === 'tool-call'
-        ? toolResultIds.includes(content.toolCallId)
-        : content.type === 'text'
-          ? content.text.length > 0
-          : true,
-    );
+    const sanitizedContent = message.content.filter((content) => {
+      // Keep text, tool-call, tool-result, reasoning, or metadata-delta
+      if (
+        content.type === 'text' ||
+        content.type === 'tool-call' ||
+        content.type === 'tool-result' ||
+        content.type === 'reasoning' ||
+        content.type === 'metadata-delta' // <- ADDED THIS
+      ) {
+        // If it is a tool-call, ensure it eventually had a matching tool-result
+        if (content.type === 'tool-call') {
+          return toolResultIds.includes(content.toolCallId);
+        }
+        return true;
+      }
+      return false;
+    });
 
     if (reasoning) {
       // @ts-expect-error: reasoning message parts in sdk is wip

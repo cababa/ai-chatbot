@@ -30,13 +30,11 @@ export function AppSidebar({ user }: { user: User | undefined }) {
             <Link
               href="/"
               onClick={() => {
-                setOpenMobile(false);
+              setOpenMobile(false);
               }}
               className="flex flex-row gap-3 items-center"
             >
-              <span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer">
-                Chatbot
-              </span>
+              <img src="/favicon.ico" alt="Favicon" className="w-8 h-8" />
             </Link>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -53,7 +51,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                   <PlusIcon />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent align="end">New Chat</TooltipContent>
+              <TooltipContent align="end">Nuevo Chat</TooltipContent>
             </Tooltip>
           </div>
         </SidebarMenu>

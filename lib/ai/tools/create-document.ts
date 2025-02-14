@@ -20,7 +20,7 @@ export const createDocument = ({ session, dataStream }: CreateDocumentProps) =>
       title: z.string(),
       kind: z.enum(artifactKinds),
     }),
-    execute: async ({ title, kind }) => {
+    async execute({ title, kind }) {
       const id = generateUUID();
 
       dataStream.writeData({
@@ -43,9 +43,14 @@ export const createDocument = ({ session, dataStream }: CreateDocumentProps) =>
         content: '',
       });
 
+      // NEW: Put the doc ID in a metadata-delta instead of text-delta
+      dataStream.writeData({
+        type: 'metadata-delta',
+        content: `Document titled "${title}" has been created with ID: ${id}. I'll remember this internally.\n`,
+      });
+
       const documentHandler = documentHandlersByArtifactKind.find(
-        (documentHandlerByArtifactKind) =>
-          documentHandlerByArtifactKind.kind === kind,
+        (handler) => handler.kind === kind,
       );
 
       if (!documentHandler) {

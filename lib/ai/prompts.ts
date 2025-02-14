@@ -42,7 +42,8 @@ export const systemPrompt = ({
   if (selectedChatModel === 'chat-model-reasoning') {
     return regularPrompt;
   } else {
-    return `${regularPrompt}\n\n${artifactsPrompt}`;
+    // ADDITION HERE: appended sentence telling the assistant to remember newly created document IDs
+    return `${regularPrompt}\n\n${artifactsPrompt}\n\nRemember to store each created document's ID/title in memory so you can update or suggest edits later without asking the user for the ID again.`;
   }
 };
 
@@ -89,15 +90,15 @@ Improve the following contents of the document based on the given prompt.
 ${currentContent}
 `
     : type === 'code'
-      ? `\
+    ? `\
 Improve the following code snippet based on the given prompt.
 
 ${currentContent}
 `
-      : type === 'sheet'
-        ? `\
+    : type === 'sheet'
+    ? `\
 Improve the following spreadsheet based on the given prompt.
 
 ${currentContent}
 `
-        : '';
+    : '';

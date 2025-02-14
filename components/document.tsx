@@ -11,13 +11,13 @@ const getActionText = (
 ) => {
   switch (type) {
     case 'create':
-      return tense === 'present' ? 'Creating' : 'Created';
+      return tense === 'present' ? 'Creando' : 'Creado';
     case 'update':
-      return tense === 'present' ? 'Updating' : 'Updated';
+      return tense === 'present' ? 'Actualizando' : 'Actualizado';
     case 'request-suggestions':
       return tense === 'present'
-        ? 'Adding suggestions'
-        : 'Added suggestions to';
+        ? 'Agregando sugerencias'
+        : 'Sugerencias agregadas a';
     default:
       return null;
   }
@@ -43,7 +43,7 @@ function PureDocumentToolResult({
       onClick={(event) => {
         if (isReadonly) {
           toast.error(
-            'Viewing files in shared chats is currently not supported.',
+            'La visualización de archivos en chats compartidos actualmente no está soportada.',
           );
           return;
         }
@@ -106,7 +106,7 @@ function PureDocumentToolCall({
       onClick={(event) => {
         if (isReadonly) {
           toast.error(
-            'Viewing files in shared chats is currently not supported.',
+            'La visualización de archivos en chats compartidos actualmente no está soportada.',
           );
           return;
         }
