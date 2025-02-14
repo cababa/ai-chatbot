@@ -232,7 +232,7 @@ function PureMultimodalInput({
 
       <Textarea
         ref={textareaRef}
-        placeholder="Send a message..."
+        placeholder="Enviar un mensaje..."
         value={input}
         onChange={handleInput}
         className={cx(
@@ -243,13 +243,15 @@ function PureMultimodalInput({
         autoFocus
         onKeyDown={(event) => {
           if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
+        event.preventDefault();
 
-            if (isLoading) {
-              toast.error('Please wait for the model to finish its response!');
-            } else {
-              submitForm();
-            }
+        if (isLoading) {
+          toast.error(
+            'Por favor, espere a que el modelo termine su respuesta!',
+          );
+        } else {
+          submitForm();
+        }
           }
         }}
       />

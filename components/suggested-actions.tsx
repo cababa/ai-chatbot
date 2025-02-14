@@ -16,24 +16,24 @@ interface SuggestedActionsProps {
 function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
   const suggestedActions = [
     {
-      title: 'What are the advantages',
-      label: 'of using Next.js?',
-      action: 'What are the advantages of using Next.js?',
+      title: 'Plan de Lecciones Dinámico',
+      label: 'Genera un plan de lecciones interactivo para el aula',
+      action: 'Ayúdame a crear un plan de lección basado en estrategias interactivas.',
     },
     {
-      title: 'Write code to',
-      label: `demonstrate djikstra's algorithm`,
-      action: `Write code to demonstrate djikstra's algorithm`,
+      title: 'Actividades para Padres',
+      label: 'Sugiere actividades para involucrar a las familias',
+      action: 'Proporciona ideas de actividades educativas para la participación de los padres.',
     },
     {
-      title: 'Help me write an essay',
-      label: `about silicon valley`,
-      action: `Help me write an essay about silicon valley`,
+      title: 'Estrategias Inclusivas',
+      label: 'Enumera estrategias ayuden a la diversidad en el aula',
+      action: 'Ayúdame a implementar métodos inclusivos para mejorar la enseñanza.',
     },
     {
-      title: 'What is the weather',
-      label: 'in San Francisco?',
-      action: 'What is the weather in San Francisco?',
+      title: 'Organización del Calendario Escolar',
+      label: 'Planifica el año escolar con actividades y eventos',
+      action: 'Elabora un calendario académico con sugerencias mensuales para el aula.',
     },
   ];
 
