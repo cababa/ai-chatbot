@@ -1,27 +1,34 @@
-import { openai } from '@ai-sdk/openai';
-import { fireworks } from '@ai-sdk/fireworks';
+import { google } from '@ai-sdk/google';
 import {
   customProvider,
   extractReasoningMiddleware,
   wrapLanguageModel,
+  generateText,
 } from 'ai';
 
 export const DEFAULT_CHAT_MODEL: string = 'chat-model-small';
 
 export const myProvider = customProvider({
   languageModels: {
-    'chat-model-small': openai('gpt-4o-mini'),
-    'chat-model-large': openai('gpt-4o'),
+    // Use a flash-lite preview for quick/light tasks
+    'chat-model-small': google('gemini-1.5-flash-lite-preview-02-05'),
+    // Use the pro latest model for complex multi-step tasks
+    'chat-model-large': google('gemini-1.5-pro-latest'),
+    // Wrap a pro model with reasoning middleware for advanced reasoning
     'chat-model-reasoning': wrapLanguageModel({
-      model: fireworks('accounts/fireworks/models/deepseek-r1'),
+      model: google('gemini-1.5-pro-latest', {
+        safetySettings: [
+          {
+            category: 'HARM_CATEGORY_UNSPECIFIED',
+            threshold: 'BLOCK_LOW_AND_ABOVE',
+          },
+        ],
+      }),
       middleware: extractReasoningMiddleware({ tagName: 'think' }),
     }),
-    'title-model': openai('gpt-4-turbo'),
-    'artifact-model': openai('gpt-4o-mini'),
-  },
-  imageModels: {
-    'small-model': openai.image('dall-e-2'),
-    'large-model': openai.image('dall-e-3'),
+    // Other models can be defined similarly
+    'title-model': google('gemini-1.5-pro-latest'),
+    'artifact-model': google('gemini-1.5-flash-lite-preview-02-05'),
   },
 });
 
@@ -48,3 +55,14 @@ export const chatModels: Array<ChatModel> = [
     description: 'Utiliza razonamiento avanzado',
   },
 ];
+
+// // Example usage:
+// async function testGeneration() {
+//   const { text } = await generateText({
+//     model: google('gemini-1.5-pro-latest'),
+//     prompt: 'Write a vegetarian lasagna recipe for 4 people.',
+//   });
+//   console.log('Generated text:', text);
+// }
+
+// testGeneration().catch(console.error);
