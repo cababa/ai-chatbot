@@ -1,4 +1,3 @@
-import { auth } from '@/app/(auth)/auth';
 import { getSuggestionsByDocumentId } from '@/lib/db/queries';
 
 export async function GET(request: Request) {
@@ -9,25 +8,10 @@ export async function GET(request: Request) {
     return new Response('Not Found', { status: 404 });
   }
 
-  const session = await auth();
-
-  if (!session || !session.user) {
-    return new Response('Unauthorized', { status: 401 });
+  const suggestions = await getSuggestionsByDocumentId({ documentId });
+  if (!suggestions || suggestions.length === 0) {
+    return new Response(JSON.stringify([]), { status: 200 });
   }
 
-  const suggestions = await getSuggestionsByDocumentId({
-    documentId,
-  });
-
-  const [suggestion] = suggestions;
-
-  if (!suggestion) {
-    return Response.json([], { status: 200 });
-  }
-
-  if (suggestion.userId !== session.user.id) {
-    return new Response('Unauthorized', { status: 401 });
-  }
-
-  return Response.json(suggestions, { status: 200 });
+  return new Response(JSON.stringify(suggestions), { status: 200 });
 }

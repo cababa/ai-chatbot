@@ -1,0 +1,1 @@
+export * from "../../../ketzai-mvp/src/lib/firebase";

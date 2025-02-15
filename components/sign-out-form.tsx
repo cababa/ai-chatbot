@@ -1,25 +1,22 @@
-import Form from 'next/form';
+"use client";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { Button } from "@/components/ui/button";
 
-import { signOut } from '@/app/(auth)/auth';
+export function SignOutForm() {
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      // Optionally redirect user or clear cookies
+      // e.g., window.location.href = "/login";
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
-export const SignOutForm = () => {
   return (
-    <Form
-      className="w-full"
-      action={async () => {
-        'use server';
-
-        await signOut({
-          redirectTo: '/',
-        });
-      }}
-    >
-      <button
-        type="submit"
-        className="w-full text-left px-1 py-0.5 text-red-500"
-      >
-        Cerrar Sesión
-      </button>
-    </Form>
+    <Button variant="outline" onClick={handleSignOut}>
+      Sign Out
+    </Button>
   );
-};
+}

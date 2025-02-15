@@ -1,9 +1,16 @@
-import NextAuth from 'next-auth';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-import { authConfig } from '@/app/(auth)/auth.config';
-
-export default NextAuth(authConfig).auth;
+export function middleware(request: NextRequest) {
+  return NextResponse.next();
+}
 
 export const config = {
-  matcher: ['/', '/:id', '/api/:path*', '/login', '/register'],
+  matcher: [
+    "/(chat)/:path*",
+    "/login",
+    "/register",
+    "/api/:path*",
+    "/:path*",
+  ],
 };

@@ -1,66 +1,92 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useActionState, useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-import { AuthForm } from '@/components/auth-form';
-import { SubmitButton } from '@/components/submit-button';
-
-import { login, type LoginActionState } from '../actions';
-
-export default function Page() {
+export default function LoginPage() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [email, setEmail] = useState('');
-  const [isSuccessful, setIsSuccessful] = useState(false);
-
-  const [state, formAction] = useActionState<LoginActionState, FormData>(
-    login,
-    {
-      status: 'idle',
-    },
-  );
-
-  useEffect(() => {
-    if (state.status === 'failed') {
-      toast.error('Invalid credentials!');
-    } else if (state.status === 'invalid_data') {
-      toast.error('Failed validating your submission!');
-    } else if (state.status === 'success') {
-      setIsSuccessful(true);
-      router.refresh();
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      toast.success("Signed in successfully");
+      router.push("/");
+    } catch (error: any) {
+      toast.error("Invalid credentials or error signing in.");
+      console.error(error);
     }
-  }, [state.status, router]);
+  }
 
-  const handleSubmit = (formData: FormData) => {
-    setEmail(formData.get('email') as string);
-    formAction(formData);
-  };
+  async function handleGoogleSignIn() {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      toast.success("Signed in with Google");
+      router.push("/");
+    } catch (error: any) {
+      toast.error("Google sign-in error");
+      console.error(error);
+    }
+  }
 
   return (
-    <div className="flex h-dvh w-screen items-start pt-12 md:pt-0 md:items-center justify-center bg-background">
-      <div className="w-full max-w-md overflow-hidden rounded-2xl flex flex-col gap-12">
-        <div className="flex flex-col items-center justify-center gap-2 px-4 text-center sm:px-16">
-          <h3 className="text-xl font-semibold dark:text-zinc-50">Sign In</h3>
-          <p className="text-sm text-gray-500 dark:text-zinc-400">
-            Use your email and password to sign in
-          </p>
+    <div className="flex h-dvh w-screen items-center justify-center bg-background">
+      <div className="w-full max-w-md space-y-4 p-6 rounded-xl border bg-white shadow-sm">
+        <h3 className="text-xl font-semibold text-center">Sign In</h3>
+        <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
+          Sign in with Google
+        </Button>
+        <div className="relative mt-2 mb-2 flex items-center justify-center">
+          <span className="absolute bg-white px-2 text-sm text-gray-500">
+            or with Email
+          </span>
+          <div className="h-px w-full bg-gray-200" />
         </div>
-        <AuthForm action={handleSubmit} defaultEmail={email}>
-          <SubmitButton isSuccessful={isSuccessful}>Sign in</SubmitButton>
-          <p className="text-center text-sm text-gray-600 mt-4 dark:text-zinc-400">
-            {"Don't have an account? "}
-            <Link
-              href="/register"
-              className="font-semibold text-gray-800 hover:underline dark:text-zinc-200"
-            >
-              Sign up
-            </Link>
-            {' for free.'}
-          </p>
-        </AuthForm>
+        <form onSubmit={handleSubmit} className="space-y-2">
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="username"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div>
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <Button className="w-full mt-2" type="submit">
+            Sign in
+          </Button>
+        </form>
+        <p className="text-center text-sm text-gray-600 mt-2">
+          Don't have an account?{" "}
+          <Link href="/register" className="font-semibold hover:underline">
+            Sign up
+          </Link>
+        </p>
       </div>
     </div>
   );
